@@ -5,7 +5,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.4-ee4c2c.svg)](https://pytorch.org)
 [![Hugging Face](https://img.shields.io/badge/🤗-Transformers-yellow.svg)](https://huggingface.co)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/amharic-llm-comparison/amharic-llm-comparison/blob/main/notebooks/02_sentiment_classification.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kina-Research/Architecture-Paradigm-Evaluation/blob/main/notebooks/02_sentiment_classification.ipynb)
 
 ---
 
@@ -217,8 +217,8 @@ amharic-llm-comparison/
 
 ### Step 1: Environment Setup
 ```bash
-git clone https://github.com/amharic-llm-comparison/amharic-llm-comparison.git
-cd amharic-llm-comparison
+git clone https://github.com/Kina-Research/Architecture-Paradigm-Evaluation.git
+cd Architecture-Paradigm-Evaluation
 
 # Install exact pinned requirements
 pip install -r requirements.txt
@@ -272,7 +272,7 @@ See [`docs/methodology.md`](docs/methodology.md), [`docs/ethics.md`](docs/ethics
   author  = {Amharic LLM Research Team},
   journal = {arXiv preprint},
   year    = {2024},
-  url     = {https://github.com/amharic-llm-comparison/amharic-llm-comparison}
+  url     = {https://github.com/Kina-Research/Architecture-Paradigm-Evaluation}
 }
 ```
 
