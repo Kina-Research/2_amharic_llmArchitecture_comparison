@@ -1,0 +1,24 @@
+{
+  "train": {
+    "wall_s": 2150.0,
+    "peak_vram_gb": 5.42,
+    "nvml_gpu_kwh": 0.108,
+    "nvml_mean_power_w": 138.2,
+    "codecarbon_kwh": 0.182,
+    "codecarbon_kg_co2eq": 0.0328
+  },
+  "inference_eval": {
+    "wall_s": 155.0,
+    "peak_vram_gb": 2.2,
+    "throughput_batched_samples_per_s": 6.451612903225806,
+    "nvml_gpu_kwh": 0.0162,
+    "codecarbon_kwh": 0.027299999999999998,
+    "n": 500
+  },
+  "latency_bs1": {
+    "latency_ms_mean": 310.0,
+    "latency_ms_std": 22.0,
+    "latency_ms_p50": 306.0,
+    "latency_ms_p95": 349.6
+  }
+}

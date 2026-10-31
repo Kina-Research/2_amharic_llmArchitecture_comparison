@@ -1,0 +1,25 @@
+{
+  "counterfactual": {
+    "flip_rate": 0.194,
+    "tv": 0.08148,
+    "natural": {
+      "n": 340,
+      "flip_rate": 0.1843
+    }
+  },
+  "positional": {
+    "flip_rate": 0.142,
+    "acc_text_first": 0.677,
+    "acc_text_last": 0.639,
+    "acc_gap": 0.038
+  },
+  "cultural": {
+    "disparity": 0.165,
+    "disparity_by_category": {
+      "ethnicity": 0.17325000000000002,
+      "religion": 0.1617,
+      "region": 0.16005
+    }
+  },
+  "bias_robustness": 0.833
+}

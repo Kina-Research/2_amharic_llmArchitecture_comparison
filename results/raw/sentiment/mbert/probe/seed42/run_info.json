@@ -1,0 +1,11 @@
+{
+  "model": "mbert",
+  "hf_id": "Davlan/bert-base-multilingual-cased-finetuned-amharic",
+  "condition": "probe",
+  "seed": 42,
+  "params": {
+    "total_params": 110620419,
+    "trainable_params": 589824,
+    "trainable_pct": 0.533
+  }
+}

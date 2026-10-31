@@ -1,0 +1,10 @@
+### Table 1. Task performance and efficiency trade-offs (LoRA r=8, α=16)
+
+| Architecture | Model | Trainable params (sent., %) | Sentiment Acc [95% CI] | Sentiment Macro-F1 [95% CI] | Seeds (sent.) | ROUGE-1 | ROUGE-2 | ROUGE-L [95% CI] | BERTScore-F1 [95% CI] | sacreBLEU | Latency sent. (ms/sample, bs=1) | Latency summ. (ms/sample, bs=1) | Throughput sent. (samples/s, batched) | Peak VRAM train sent. (GB) | Peak VRAM train summ. (GB) | Peak VRAM infer sent. (GB) | Bias Robustness (↑) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Encoder-only | Davlan/bert-base-multilingual-cased-finetuned-amharic | 0.533 | 0.7189 [0.6967, 0.7389] | 0.7181 [0.6962, 0.7379] | 1 | 0.2877 | 0.1115 | 0.2391 [0.2346, 0.2431] | 0.6832 [0.6804, 0.6861] | 8.42 | 12.4 | 145 | 322.6 | 1.82 | 3.85 | 0.85 | 0.8820 |
+| Encoder-Decoder | google/mt5-small | 0.393 | 0.7020 [0.6819, 0.7231] | 0.6994 [0.6789, 0.7207] | 1 | 0.3414 | 0.1493 | 0.2996 [0.2955, 0.3039] | 0.7225 [0.7199, 0.7251] | 12.65 | 28.7 | 310 | 139.4 | 3.24 | 5.42 | 1.45 | 0.8660 |
+| Decoder-only | bigscience/bloomz-560m | 0.281 | 0.6925 [0.6714, 0.7136] | 0.6909 [0.6692, 0.7122] | 1 | 0.3143 | 0.1303 | 0.2721 [0.2682, 0.2763] | 0.7073 [0.7050, 0.7097] | 10.82 | 45.2 | 520 | 88.5 | 4.85 | 7.15 | 2.10 | 0.8507 |
+
+CIs: 1,000-sample percentile bootstrap over the evaluation set. Latency: mean over 100 (sentiment) / 50 (summarization) single-sample forward passes on the GPU in env.json.
+Runs found: 15 (task, model, condition) groups.

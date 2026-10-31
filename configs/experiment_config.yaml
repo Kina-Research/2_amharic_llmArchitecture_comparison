@@ -1,0 +1,106 @@
+# =============================================================================
+# Single source of truth for every hyperparameter used in the experiment.
+# All scripts read this file; CLI flags only override it explicitly.
+# =============================================================================
+experiment:
+  name: amharic-llm-comparison
+  seeds: [42]              # add e.g. [42, 43, 44] to report mean ± std across runs
+  results_dir: results
+  processed_data_dir: data/processed
+
+datasets:
+  sentiment:
+    # Tried in order; the one actually used (+ its HF revision) is written to
+    # data/processed/manifest.json.
+    hf_candidates:
+      - {path: shmuhammad/AfriSenti-twitter-sentiment, name: amh}
+      - {path: masakhane/afrisenti, name: amh}
+    text_column: tweet         # falls back to "text" automatically
+    label_column: label
+    labels: [positive, neutral, negative]   # canonical order used everywhere
+    val_ratio: 0.2             # stratified 80/20 after cleaning (pooled official splits)
+    min_chars: 5
+  summarization:
+    hf_candidates:
+      - {path: csebuetnlp/xlsum, name: amharic}
+    source_column: text
+    target_column: summary
+    eval_size: 500             # "amharic-eval-500": seeded sample of the XL-Sum test split
+    train_max: null            # null = use all XL-Sum train pairs for fine-tuning
+    min_source_chars: 200
+    min_target_chars: 20
+
+preprocessing:
+  max_length: 512            # sentiment: fixed padding/truncation (spec)
+  pad_to_max_length: true
+  summarization_prefix: "summarize: "
+  max_source_length: 512
+  max_target_length: 64
+
+models:
+  mbert:
+    hf_id: Davlan/bert-base-multilingual-cased-finetuned-amharic
+    architecture: encoder_only
+    tokenizer_family: WordPiece
+    lora_targets: [query, key, value]
+    cls_head: classifier
+    fp16: true
+  mt5:
+    hf_id: google/mt5-small
+    architecture: encoder_decoder
+    tokenizer_family: SentencePiece
+    lora_targets: [q, k, v]
+    cls_head: classification_head
+    fp16: false              # mT5 overflows (NaN loss) in fp16; T4 has no bf16 -> fp32
+    sentiment_per_device_batch_size: 8   # effective batch kept at 32 via grad. accumulation
+  bloomz:
+    hf_id: bigscience/bloomz-560m
+    architecture: decoder_only
+    tokenizer_family: Byte-level BPE
+    lora_targets: [query_key_value]
+    cls_head: score
+    fp16: true
+    sentiment_per_device_batch_size: 8
+    summarization_per_device_batch_size: 4
+
+lora:
+  r: 8
+  alpha: 16
+  dropout: 0.1
+
+training:
+  sentiment:
+    learning_rate: 2.0e-4
+    per_device_batch_size: 16
+    gradient_accumulation_steps: 2
+    num_epochs: 5
+    warmup_ratio: 0.1
+    weight_decay: 0.01
+    probe_learning_rate: 1.0e-3   # head-only "pre-LoRA" condition
+  summarization:
+    learning_rate: 5.0e-4
+    per_device_batch_size: 8
+    gradient_accumulation_steps: 4
+    num_epochs: 3
+    warmup_ratio: 0.05
+    weight_decay: 0.01
+  generation:
+    num_beams: 4
+    max_new_tokens: 64
+    no_repeat_ngram_size: 3
+    length_penalty: 1.0
+
+bias:
+  # Sentiment-model conditions; "probe" is the pre-LoRA reference.
+  conditions: [probe, lora, lora_cda, lora_cda_rw]
+  cda_target_expansion: 0.30     # counterfactual copies ≈ 30% of training set
+  reweight_factor: 2.0           # loss weight for examples containing bias-sensitive tokens
+  n_positional_samples: 1000
+
+evaluation:
+  bootstrap_samples: 1000
+  confidence_level: 0.95
+  ece_bins: 15
+  latency_samples: 100
+  latency_warmup: 10
+  bertscore_model: xlm-roberta-large   # covers Amharic (mBERT default for "am" does not)

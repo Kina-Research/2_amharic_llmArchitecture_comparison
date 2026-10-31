@@ -1,0 +1,97 @@
+# =============================================================================
+# .gitignore - Amharic LLM Comparison Project
+# =============================================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+eggs/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Virtual Environments ---
+.env
+.venv
+env/
+venv/
+ENV/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# --- ML / Model Artifacts ---
+outputs/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+wandb/
+runs/
+mlruns/
+
+# --- Data (large files) ---
+data/raw/
+data/processed/
+data/cache/
+*.csv.gz
+*.parquet
+*.arrow
+*.h5
+*.hdf5
+
+# --- HuggingFace Cache ---
+.cache/
+~/.cache/huggingface/
+
+# --- Logs ---
+logs/
+*.log
+tensorboard/
+
+# --- Energy Tracking ---
+emissions.csv
+codecarbon.log
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# --- Secrets ---
+.env
+.env.local
+*.pem
+*.key
+
+# --- Temporary ---
+tmp/
+temp/
+scratch/
+*.tmp
+
+# --- Coverage / Testing ---
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/

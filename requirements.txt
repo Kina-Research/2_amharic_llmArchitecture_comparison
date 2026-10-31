@@ -1,0 +1,25 @@
+# Pinned, mutually compatible versions (Python 3.10–3.12, CUDA 12.x).
+# On Colab the preinstalled torch build is kept; the exact versions actually
+# used in each run are recorded in results/raw/**/env.json.
+torch==2.4.1
+transformers==4.44.2
+tokenizers==0.19.1
+datasets==2.21.0          # <3.0 so script-based HF datasets (AfriSenti, XL-Sum) still load
+peft==0.12.0
+accelerate==0.34.2
+sentencepiece==0.2.0
+protobuf==4.25.4
+huggingface-hub==0.24.6
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.1
+matplotlib==3.9.2
+sacrebleu==2.4.3
+bert-score==0.3.13
+codecarbon==2.7.1
+nvidia-ml-py==12.560.30
+pyyaml==6.0.2
+tqdm==4.66.5
+nbformat==5.10.4
+pytest==8.3.3

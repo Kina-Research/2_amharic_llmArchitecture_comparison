@@ -1,0 +1,11 @@
+{
+  "model": "bloomz",
+  "hf_id": "bigscience/bloomz-560m",
+  "condition": "probe",
+  "seed": 42,
+  "params": {
+    "total_params": 559214592,
+    "trainable_params": 1572864,
+    "trainable_pct": 0.281
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "model": "mt5",
+  "hf_id": "google/mt5-small",
+  "condition": "probe",
+  "seed": 42,
+  "params": {
+    "total_params": 300176768,
+    "trainable_params": 1179648,
+    "trainable_pct": 0.393
+  }
+}

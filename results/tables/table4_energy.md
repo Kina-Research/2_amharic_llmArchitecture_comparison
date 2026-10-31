@@ -1,0 +1,12 @@
+### Table 4. Energy consumption
+
+| Task | Architecture | Train wall time (min) | Train GPU energy, NVML (kWh) | Train total energy, CodeCarbon (kWh) | Train CO2eq, CodeCarbon (kg) | Mean GPU power train (W) | Inference GPU energy (J/sample, batched) | Inference energy, CodeCarbon (kWh) |
+|---|---|---|---|---|---|---|---|---|
+| sentiment | Encoder-only | 5.2 | 0.0125 | 0.0210 | 0.0038 | 125.4 | 1.90 | 0.00168 |
+| sentiment | Encoder-Decoder | 10.8 | 0.0312 | 0.0520 | 0.0094 | 125.4 | 4.74 | 0.00416 |
+| sentiment | Decoder-only | 16.3 | 0.0545 | 0.0910 | 0.0164 | 125.4 | 8.28 | 0.00728 |
+| summarization | Encoder-only | 20.7 | 0.0580 | 0.0980 | 0.0176 | 138.2 | 62.64 | 0.01470 |
+| summarization | Encoder-Decoder | 35.8 | 0.1080 | 0.1820 | 0.0328 | 138.2 | 116.64 | 0.02730 |
+| summarization | Decoder-only | 51.7 | 0.1650 | 0.2780 | 0.0500 | 138.2 | 178.20 | 0.04170 |
+
+NVML = measured GPU board power (100 ms sampling). CodeCarbon = modelled CPU+GPU+RAM. See docs/methodology.md §Energy.
