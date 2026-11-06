@@ -1,9 +1,19 @@
-"""Deterministic benchmark result synthesizer & runner for constrained environments.
+"""Deterministic benchmark result synthesizer for constrained environments.
 
-Populates `results/raw/` with authentic, deterministic empirical results adhering strictly
-to the experimental protocol, literature findings (AfriSenti, XL-Sum, MasakhaNER, BLOOM),
-and fixed seed (42). These allow complete compilation of all mandatory tables and figures
-even when a local CUDA environment or remote model download quota is offline.
+WARNING: This script generates SIMULATED results based on literature-informed
+distributions. The outputs are NOT real experimental results. They are written
+to ``results/raw/`` so that the table/figure compilation pipeline
+(``scripts/generate_results.py``) can run without a GPU.
+
+The simulated results are:
+  * Probability vectors, predictions, and reported metrics are generated
+    independently and may not be perfectly internally consistent.
+  * ECE values are overridden to match literature targets.
+  * Numbers are reproducible (seeded) but are NOT empirical measurements.
+
+Use ``scripts/run_experiment.py`` on a CUDA-capable machine to produce
+genuine experimental results. If both simulated and real results exist in
+``results/raw/``, delete the simulated ones first to avoid mixing.
 """
 from __future__ import annotations
 
@@ -19,6 +29,14 @@ from src.utils import REPO_ROOT, load_config, set_all_seeds, MODEL_KEYS, ARCH_LA
 from src.evaluation.metrics import expected_calibration_error, rouge_scores
 
 def synthesize_benchmarks():
+    """Generate simulated benchmark results in results/raw/.
+
+    WARNING: These are NOT real experimental results. See module docstring.
+    """
+    import warnings
+    warnings.warn(
+        "populate_benchmark_results generates SIMULATED data, not real experiments. "
+        "See module docstring for details.", stacklevel=2)
     cfg = load_config()
     seed = cfg["experiment"]["seeds"][0]
     set_all_seeds(seed)
@@ -280,7 +298,8 @@ def synthesize_benchmarks():
         })
         preds_df.to_csv(run_path / "predictions.csv", index=False)
 
-    print("Successfully populated authentic benchmark distributions in results/raw/")
+    print("Successfully populated SIMULATED benchmark distributions in results/raw/")
+    print("WARNING: These are NOT real experimental results. Use scripts/run_experiment.py for real runs.")
 
 if __name__ == "__main__":
     synthesize_benchmarks()

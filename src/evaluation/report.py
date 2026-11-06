@@ -5,7 +5,6 @@ results/tables/STATUS.md. Entry point: scripts/generate_results.py.
 """
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 
@@ -188,7 +187,8 @@ def table_stats(runs, cfg) -> tuple[pd.DataFrame, pd.DataFrame]:
         ra, rb = _get(runs, "sentiment", a), _get(runs, "sentiment", b)
         if ra and rb:
             pa, pb = ra[0]["pred"], rb[0]["pred"]
-            assert (pa["id"].values == pb["id"].values).all(), "prediction files not aligned"
+            if not (pa["id"].values == pb["id"].values).all():
+                raise ValueError("prediction files not aligned")
             y = pa["gold"].values
             mc = st.mcnemar(y, pa["pred"].values, pb["pred"].values)
             f1 = lambda idx, w: float(f1_score(y[idx], (pa if w == "a" else pb)["pred"].values[idx],  # noqa: E731
@@ -453,6 +453,14 @@ def build_all(results_dir: str | Path = "results", config: str | None = None) ->
     status = ["# Results status", "", f"Found {len(runs)}/{len(expected)} expected run groups.", ""]
     status += ["Missing (shown as n/a in tables):"] + [f"- {t}/{m}/{c}" for t, m, c in missing] if missing else ["All runs present."]
     status += ["", "Figures generated: " + (", ".join(made) or "none")]
+    # Real runs (src/training/*) always record the software/hardware environment in
+    # run_info.json; scripts/populate_benchmark_results.py does not. Flag the latter.
+    unverified = sorted(f"{t}/{m}/{c}/seed{r['seed']}" for (t, m, c), rs in runs.items() for r in rs
+                        if not (r["run_info"] or {}).get("environment"))
+    if unverified:
+        status += ["", f"WARNING: {len(unverified)} run(s) have no captured environment in run_info.json and are",
+                   "probably SIMULATED placeholders (scripts/populate_benchmark_results.py), not experiments:"]
+        status += [f"- {u}" for u in unverified]
     (tdir / "STATUS.md").write_text("\n".join(status) + "\n", encoding="utf-8")
-    return {"runs": len(runs), "missing": missing, "figures": made}
+    return {"runs": len(runs), "missing": missing, "figures": made, "unverified_runs": len(unverified)}
 

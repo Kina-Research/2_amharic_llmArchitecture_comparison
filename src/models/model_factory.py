@@ -44,7 +44,7 @@ def build_sentiment_model(model_key: str, cfg: dict, condition: str, labels: lis
     mcfg = cfg["models"][model_key]
     model = AutoModelForSequenceClassification.from_pretrained(
         mcfg["hf_id"], num_labels=len(labels),
-        id2label=dict(enumerate(labels)), label2id={l: i for i, l in enumerate(labels)})
+        id2label=dict(enumerate(labels)), label2id={lbl: i for i, lbl in enumerate(labels)})
     model.config.pad_token_id = tok.pad_token_id
     head = mcfg["cls_head"]
     if condition == "probe":

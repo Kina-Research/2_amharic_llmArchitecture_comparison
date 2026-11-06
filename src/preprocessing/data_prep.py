@@ -15,7 +15,7 @@ from typing import Any
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from src.preprocessing.text_cleaner import CleaningReport, clean_frame, verify_no_leakage
+from src.preprocessing.text_cleaner import CleaningReport, clean_frame, dedup_key, verify_no_leakage
 from src.utils import capture_environment, save_json, sha256_file
 
 
@@ -111,8 +111,6 @@ def prepare_summarization(cfg: dict, out_dir: Path, seed: int) -> dict:
     train = clean_frame(pd.concat(train_parts, ignore_index=True), ["source", "target"], mins,
                         rep_train, dedup_on="source")
     # Remove any train pair whose article OR reference summary appears in eval-500.
-    from src.preprocessing.text_cleaner import dedup_key
-
     ek_src, ek_tgt = set(eval500["source"].map(dedup_key)), set(eval500["target"].map(dedup_key))
     n = len(train)
     train = train[~train["source"].map(dedup_key).isin(ek_src) & ~train["target"].map(dedup_key).isin(ek_tgt)]

@@ -78,8 +78,6 @@ desktop.ini
 ehthumbs.db
 
 # --- Secrets ---
-.env
-.env.local
 *.pem
 *.key
 
@@ -89,6 +87,10 @@ temp/
 scratch/
 *.tmp
 amharic-llm-comparison/
+
+# --- Matplotlib Cache ---
+.mplcache/
+results/figures/.mplcache/
 
 # --- Coverage / Testing ---
 htmlcov/

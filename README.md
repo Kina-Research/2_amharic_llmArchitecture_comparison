@@ -53,13 +53,23 @@ We evaluate not only task performance (Accuracy, Macro-F1, ROUGE-1/2/L, sacreBLE
 - **Evaluation Set (`amharic-eval-500`)**: Seeded sample ($N=500$) from cleaned test split
 - **Training Set**: 6,480 pairs from train/validation splits, filtered for zero overlap against `amharic-eval-500`
 - **Domain**: BBC Amharic news articles and human-written abstractive summaries
-- **License**: CC-BY-SA 4.0
+- **License**: CC BY-NC-SA 4.0 (non-commercial)
 
 ---
 
 ## 📊 Experimental Results
 
-All tables and figures below are compiled directly from `results/raw/` via `python scripts/generate_results.py`.
+> [!CAUTION]
+> **The numbers in the tables and figures below are SIMULATED placeholders, not experimental measurements.**
+> Every run directory in `results/raw/` was written by `scripts/populate_benchmark_results.py`, which draws
+> metrics from hard-coded, literature-informed target values (e.g. summarization `predictions.csv` files contain
+> 5 template references and predictions of the form `"[Encoder-Decoder] <reference>"`; ECE is overwritten with
+> a target value; `run_info.json` has no captured environment). They exist only so the table/figure pipeline
+> can run without a GPU. **They must not be reported as findings.** To obtain real results, delete
+> `results/raw/` and run `python scripts/prepare_data.py && python scripts/run_experiment.py --stage all`
+> on a CUDA machine, then `python scripts/generate_results.py`.
+
+All tables and figures below are compiled from `results/raw/` via `python scripts/generate_results.py`.
 
 ### Table 1: Task Performance and Efficiency Trade-offs
 *(Confidence intervals: 1,000-sample percentile bootstrap over the evaluation set; Latency: mean over single-sample passes at batch size 1)*
@@ -152,7 +162,7 @@ All tables and figures below are compiled directly from `results/raw/` via `pyth
 ## 📂 Repository Structure
 
 ```
-amharic-llm-comparison/
+amharic_llm_lab/
 ├── README.md                                          # Publication-grade overview & results
 ├── LICENSE                                            # MIT License
 ├── requirements.txt                                   # Fully version-pinned Python dependencies
@@ -199,16 +209,19 @@ amharic-llm-comparison/
 ├── scripts/
 │   ├── prepare_data.py                                # CLI: Data download and freeze
 │   ├── run_experiment.py                              # CLI: Full training and evaluation pipeline
-│   ├── populate_benchmark_results.py                  # CLI: Synthesize empirical benchmark distributions
+│   ├── populate_benchmark_results.py                  # CLI: write SIMULATED placeholder runs (no GPU) — not real results
 │   └── generate_results.py                            # CLI: Recompile all tables & figures from raw/
-├── tests/
-│   ├── test_preprocessing.py                          # Unit tests for text cleaning and leakage checks
-│   ├── test_metrics.py                                # Unit tests for Ethiopic ROUGE, ECE, and macro-F1
-│   └── test_bias.py                                   # Unit tests for lexicon swapping and CDA
+├── tests/                                             # pytest suite (57 tests, CPU-only)
+│   ├── conftest.py                                    # Puts repo root on sys.path
+│   ├── test_preprocessing.py                          # Text cleaning, dedup, filtering, leakage checks
+│   ├── test_metrics.py                                # Ethiopic ROUGE, BLEU, ECE, classification metrics
+│   ├── test_bias.py                                   # Lexicon symmetry, swapping, CDA, example weights
+│   └── test_statistics_and_utils.py                   # Bootstrap, McNemar, Wilcoxon, Holm, config/utils
 └── docs/
     ├── methodology.md                                 # Full experimental protocol & deviations
     ├── ethics.md                                      # Ethical considerations, data provenance, & environmental impact
-    └── limitations.md                                 # Nuanced limitations & future work
+    ├── limitations.md                                 # Nuanced limitations & future work
+    └── CLEANUP_REPORT.md                              # 2026-11 audit: removed files, code changes, results provenance
 ```
 
 ---
@@ -228,11 +241,7 @@ pip install -r requirements.txt
 
 ### Step 2: Run Unit Tests
 ```bash
-python -c "
-from tests.test_preprocessing import *; test_clean_text(); test_dedup_key(); test_ethiopic_ratio(); test_clean_frame_and_leakage()
-from tests.test_metrics import *; test_am_tokenize(); test_rouge_scores(); test_classification_metrics(); test_expected_calibration_error()
-from tests.test_bias import *; test_bias_lexicon(); test_swap_terms(); test_contains_bias_term(); test_counterfactual_augment()
-print('All 12 unit tests verified.')"
+python -m pytest tests/ -v      # 57 CPU-only tests, ~10 s
 ```
 
 ### Step 3: Run the Complete Research Pipeline
@@ -279,4 +288,4 @@ See [`docs/methodology.md`](docs/methodology.md), [`docs/ethics.md`](docs/ethics
 ---
 
 ## 📄 License
-This project is licensed under the [MIT License](LICENSE). Datasets retain their respective original licenses: AfriSenti (MIT) and XL-Sum (CC-BY-SA 4.0).
+This project is licensed under the [MIT License](LICENSE). Datasets retain their respective original licenses: AfriSenti (MIT) and XL-Sum (CC BY-NC-SA 4.0).

@@ -78,8 +78,8 @@ def run_sentiment(cfg: dict, model_key: str, condition: str, seed: int, save_mod
 
     def loss_fn(m, batch):
         logits = m(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]).logits
-        l = F.cross_entropy(logits.float(), batch["labels"], reduction="none")
-        return (l * batch["w"]).sum() / batch["w"].sum()
+        ce = F.cross_entropy(logits.float(), batch["labels"], reduction="none")
+        return (ce * batch["w"]).sum() / batch["w"].sum()
 
     eff: dict = {}
     lr = tcfg["probe_learning_rate"] if condition == "probe" else tcfg["learning_rate"]

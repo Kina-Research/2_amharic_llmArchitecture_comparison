@@ -26,7 +26,7 @@ def train_loop(model, loader: DataLoader, loss_fn: Callable, *, lr: float, epoch
     total = math.ceil(len(loader) / accum) * epochs
     sched = get_linear_schedule_with_warmup(opt, int(warmup_ratio * total), total)
     use_amp = fp16 and device.type == "cuda"
-    scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
+    scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
     log, step, t0 = [], 0, time.perf_counter()
     model.train()
     for epoch in range(epochs):

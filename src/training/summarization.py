@@ -20,7 +20,7 @@ from src.training.loop import train_loop
 from src.utils import capture_environment, run_dir, save_json, set_all_seeds
 
 
-def _collate(pad_id: int, decoder_only: bool):
+def _collate(pad_id: int):
     def fn(batch):
         out = {}
         for k in batch[0]:
@@ -86,7 +86,7 @@ def run_summarization(cfg: dict, model_key: str, seed: int, save_model: bool = F
     bs = mcfg.get("summarization_per_device_batch_size", tcfg["per_device_batch_size"])
     accum = max(1, tcfg["per_device_batch_size"] * tcfg["gradient_accumulation_steps"] // bs)
     loader = DataLoader(rows, batch_size=bs, shuffle=True, generator=torch.Generator().manual_seed(seed),
-                        collate_fn=_collate(tok.pad_token_id, model_key == "bloomz"))
+                        collate_fn=_collate(tok.pad_token_id))
 
     def loss_fn(m, batch):
         return m(**batch).loss.float()
