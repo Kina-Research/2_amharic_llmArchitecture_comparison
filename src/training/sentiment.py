@@ -39,14 +39,16 @@ def make_predictor(model, tok, max_length: int, pad_to_max: bool, fp16: bool, ba
 
 
 def run_sentiment(cfg: dict, model_key: str, condition: str, seed: int, save_model: bool = False,
-                  epochs_override: int | None = None) -> Path:
+                  epochs_override: int | None = None, train_limit: int | None = None) -> Path:
     set_all_seeds(seed)
     out = run_dir(cfg["experiment"]["results_dir"], "sentiment", model_key, condition, seed)
     out.mkdir(parents=True, exist_ok=True)
     data_dir = Path(cfg["experiment"]["processed_data_dir"])
     labels = cfg["datasets"]["sentiment"]["labels"]
-    l2i = {l: i for i, l in enumerate(labels)}
+    l2i = {lbl: i for i, lbl in enumerate(labels)}
     train_df = pd.read_csv(data_dir / "sentiment_train.csv")
+    if train_limit:
+        train_df = train_df.sample(n=min(train_limit, len(train_df)), random_state=seed)
     val_df = pd.read_csv(data_dir / "sentiment_val.csv")
     mcfg, tcfg, bcfg = cfg["models"][model_key], cfg["training"]["sentiment"], cfg["bias"]
     pp = cfg["preprocessing"]

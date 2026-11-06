@@ -58,7 +58,7 @@ def main() -> None:
                         print(f"skip sentiment/{m}/{c}/seed{seed} (exists)")
                         continue
                     try:
-                        run_sentiment(cfg, m, c, seed, args.save_models, args.epochs)
+                        run_sentiment(cfg, m, c, seed, args.save_models, args.epochs, 50 if smoke else None)
                     except Exception:  # noqa: BLE001
                         traceback.print_exc()
                         failures.append(f"sentiment/{m}/{c}/seed{seed}")
