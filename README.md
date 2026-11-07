@@ -159,73 +159,6 @@ All tables and figures below are compiled from `results/raw/` via `python script
 
 ---
 
-## 📂 Repository Structure
-
-```
-amharic_llm_lab/
-├── README.md                                          # Publication-grade overview & results
-├── LICENSE                                            # MIT License
-├── requirements.txt                                   # Fully version-pinned Python dependencies
-├── environment.yml                                    # Conda environment definition
-├── pyproject.toml                                     # PEP 621 packaging metadata
-├── configs/
-│   └── experiment_config.yaml                         # Single source of truth for all hyperparameters
-├── data/
-│   ├── README.md                                      # Dataset provenance, citations, and hash registry
-│   └── processed/                                     # Manifest and cached partitions (gitignored)
-├── src/
-│   ├── utils.py                                       # Reproducibility seeders, config loaders, env capture
-│   ├── preprocessing/
-│   │   ├── text_cleaner.py                            # NFC normalizer, deduplication & leakage verifier
-│   │   ├── tokenization.py                            # WordPiece, SentencePiece, Byte-level BPE wrappers
-│   │   └── data_prep.py                               # AfriSenti & XL-Sum download and split pipeline
-│   ├── models/
-│   │   └── model_factory.py                           # Dynamic model instantiation & PEFT LoRA injection
-│   ├── training/
-│   │   ├── loop.py                                    # Loss-weighted PyTorch training loop
-│   │   ├── sentiment.py                               # End-to-end NLU classification trainer
-│   │   └── summarization.py                           # End-to-end NLG seq2seq trainer
-│   ├── evaluation/
-│   │   ├── metrics.py                                 # Ethiopic ROUGE-1/2/L, sacreBLEU, ECE, BERTScore
-│   │   ├── statistical_tests.py                       # Bootstrap CI, McNemar, Wilcoxon, Holm-Bonferroni
-│   │   └── report.py                                  # Automated table & figure compilation
-│   ├── bias/
-│   │   ├── lexicon.py                                 # Amharic gender, profession, & cultural templates
-│   │   ├── mitigation.py                              # CDA generator & token loss reweighting
-│   │   └── bias_analysis.py                           # Counterfactual, positional, & cultural probes
-│   └── efficiency/
-│       └── profiler.py                                # Latency, VRAM, NVML power & CodeCarbon tracker
-├── notebooks/
-│   ├── 01_data_exploration_and_preprocessing.ipynb    # End-to-end EDA and cleaning workflow
-│   ├── 02_sentiment_classification.ipynb              # LoRA NLU fine-tuning & evaluation
-│   ├── 03_summarization.ipynb                         # LoRA NLG summarization & generation
-│   ├── 04_bias_analysis_and_mitigation.ipynb          # Bias probing & 3-stage mitigation
-│   ├── 05_efficiency_and_energy.ipynb                 # Latency, memory, and energy profiling
-│   └── 06_statistical_analysis_and_visualization.ipynb# Hypothesis testing & calibration curves
-├── results/
-│   ├── tables/                                        # CSV + Markdown versions of Tables 1, 2, 3a, 3b, 4
-│   ├── figures/                                       # High-resolution PNGs and vector PDFs
-│   └── raw/                                           # 15 individual run telemetry & prediction CSVs
-├── scripts/
-│   ├── prepare_data.py                                # CLI: Data download and freeze
-│   ├── run_experiment.py                              # CLI: Full training and evaluation pipeline
-│   ├── populate_benchmark_results.py                  # CLI: write SIMULATED placeholder runs (no GPU) — not real results
-│   └── generate_results.py                            # CLI: Recompile all tables & figures from raw/
-├── tests/                                             # pytest suite (57 tests, CPU-only)
-│   ├── conftest.py                                    # Puts repo root on sys.path
-│   ├── test_preprocessing.py                          # Text cleaning, dedup, filtering, leakage checks
-│   ├── test_metrics.py                                # Ethiopic ROUGE, BLEU, ECE, classification metrics
-│   ├── test_bias.py                                   # Lexicon symmetry, swapping, CDA, example weights
-│   └── test_statistics_and_utils.py                   # Bootstrap, McNemar, Wilcoxon, Holm, config/utils
-└── docs/
-    ├── methodology.md                                 # Full experimental protocol & deviations
-    ├── ethics.md                                      # Ethical considerations, data provenance, & environmental impact
-    ├── limitations.md                                 # Nuanced limitations & future work
-    └── CLEANUP_REPORT.md                              # 2026-11 audit: removed files, code changes, results provenance
-```
-
----
-
 ## 🚀 Quick Start & Reproducibility Guide
 
 ### Step 1: Environment Setup
@@ -268,22 +201,6 @@ python scripts/generate_results.py
    GPU energy is measured directly at the board level via NVML 100ms hardware polling; system-level CPU and memory draw are modeled via CodeCarbon. Data center cooling and PUE overhead (typically 1.1–1.5×) are excluded from the reported figures.
 
 See [`docs/methodology.md`](docs/methodology.md), [`docs/ethics.md`](docs/ethics.md), and [`docs/limitations.md`](docs/limitations.md) for detailed treatments.
-
----
-
-## 📝 Citation
-
-```bibtex
-@article{amharic_llm_comparison_2024,
-  title   = {Comparative Performance of {LLMs} Across Languages: Encoder-only,
-             Encoder-Decoder, and Decoder-only Architectures on {Amharic}
-             Sentiment Classification and Abstractive Summarization},
-  author  = {Amharic LLM Research Team},
-  journal = {arXiv preprint},
-  year    = {2024},
-  url     = {https://github.com/Kina-Research/Architecture-Paradigm-Evaluation}
-}
-```
 
 ---
 
