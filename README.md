@@ -9,7 +9,7 @@
 
 ---
 
-## Abstract
+## Summary
 
 We present a systematic, version-controlled empirical comparison of three major transformer architecture families — **encoder-only** (mBERT-Amharic, ~110M), **encoder-decoder** (mT5-small, ~300M), and **decoder-only** (BLOOMZ-560M, ~560M) — on two core Amharic NLP benchmarks: **three-class sentiment classification** (~9,480 social-media texts from AfriSenti) and **abstractive summarization** (500 BBC Amharic news article–summary pairs from XL-Sum, evaluated against human references). All models are fine-tuned under identical conditions using **LoRA** (rank $r = 8$, scaling $\alpha = 16$) to restrict trainable parameters to $<0.6\%$ of the total. 
 
