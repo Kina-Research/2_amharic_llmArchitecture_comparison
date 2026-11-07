@@ -85,6 +85,7 @@ ehthumbs.db
 tmp/
 temp/
 scratch/
+results_smoke/
 *.tmp
 amharic-llm-comparison/
 
